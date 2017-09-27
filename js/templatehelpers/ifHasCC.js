@@ -22,8 +22,10 @@ define(function(require) {
 
 	var _ = require('underscore');
 
-	return function(cc, ccList, options) {
-		if (!_.isUndefined(cc) || (!_.isUndefined(ccList) && ccList.length > 0)) {
+	return function(options) {
+		var hasCc = _.isUndefined(this.cc.length > 0);
+		var hasBcc = _.isUndefined(this.bcc.length > 0);
+		if (hasCc || hasBcc) {
 			return options.fn(this);
 		} else {
 			return options.inverse(this);

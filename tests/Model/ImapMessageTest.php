@@ -35,7 +35,6 @@ class ImapMessageTest extends PHPUnit_Framework_TestCase {
 		$m = new IMAPMessage(null, 'INBOX', 123, $data);
 
 		$this->assertNull($m->getFrom());
-		$this->assertNull($m->getFromEmail());
 	}
 
 	public function testGetReplyCcList() {

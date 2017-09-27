@@ -31,6 +31,7 @@ define(function(require) {
 				this.unset('folder');
 			}
 			this.listenTo(this.get('flags'), 'change', this._transformEvent);
+			this.set('dateMicro', this.get('dateInt') * 1000);
 		},
 		_transformEvent: function() {
 			this.trigger('change');

@@ -23,9 +23,9 @@ define(function(require) {
 	var _ = require('underscore');
 
 	return function(options) {
-		var hasCc = _.isUndefined(this.cc) && (_.isUndefined(this.ccList) || this.ccList.length === 0);
-		var hasBcc = _.isUndefined(this.bcc) && (_.isUndefined(this.bccList) || this.bccList.length === 0);
-		if (hasCc || hasBcc) {
+		var hasCc = _.isUndefined(this.cc.length === 0);
+		var hasBcc = _.isUndefined(this.bcc.length === 0);
+		if (!hasCc && !hasBcc) {
 			return options.fn(this);
 		} else {
 			return options.inverse(this);

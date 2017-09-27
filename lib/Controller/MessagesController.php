@@ -31,6 +31,7 @@ namespace OCA\Mail\Controller;
 use OCA\Mail\Exception\ServiceException;
 use OCA\Mail\Http\AttachmentDownloadResponse;
 use OCA\Mail\Http\HtmlResponse;
+use OCA\Mail\Model\IMAPMessage;
 use OCA\Mail\Service\AccountService;
 use OCA\Mail\Service\ContactsIntegration;
 use OCA\Mail\Service\IAccount;
@@ -144,8 +145,8 @@ class MessagesController extends Controller {
 				$j['delete'] = (string)$this->l10n->t('Delete permanently');
 			}
 
+			// This is hacky and should be done on the client-side
 			if ($mailBox->getSpecialRole() === 'sent') {
-				$j['fromEmail'] = $j['toEmail'];
 				$j['from'] = $j['to'];
 				if((count($j['toList']) > 1) || (count($j['ccList']) > 0)) {
 					$j['from'] .= ' ' . $this->l10n->t('& others');
@@ -488,14 +489,14 @@ class MessagesController extends Controller {
 	 * @param integer $accountId
 	 * @param string $folderId
 	 * @param $id
-	 * @param $m
+	 * @param IMAPMessage $m
 	 * @param IAccount $account
 	 * @param IMailBox $mailBox
 	 * @return mixed
 	 */
-	private function enhanceMessage($accountId, $folderId, $id, $m, IAccount $account, $mailBox) {
+	private function enhanceMessage($accountId, $folderId, $id, IMAPMessage $m, IAccount $account, $mailBox) {
 		$json = $m->getFullMessage($account->getEmail(), $mailBox->getSpecialRole());
-		$json['senderImage'] = $this->contactsIntegration->getPhoto($m->getFromEmail());
+		$json['senderImage'] = $this->contactsIntegration->getPhoto($m->getFrom()->first()->bare_addresses[0]);
 		if (isset($json['hasHtmlBody'])) {
 			$json['htmlBodyUrl'] = $this->buildHtmlBodyUrl($accountId, $folderId, $id);
 		}

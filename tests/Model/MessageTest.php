@@ -20,6 +20,7 @@
  */
 namespace OCA\Mail\Tests\Model;
 
+use Horde_Mail_Rfc822_List;
 use Horde_Mime_Part;
 use OCA\Mail\Model\Message;
 use PHPUnit_Framework_TestCase;
@@ -96,7 +97,7 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testFrom() {
-		$from = 'user@example.com';
+		$from = new Horde_Mail_Rfc822_List('user@example.com');
 
 		$this->message->setFrom($from);
 
@@ -112,13 +113,11 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 
 		$this->message->setTo($to);
 
-		$this->assertEquals($expected, $this->message->getToList());
-		$this->assertEquals($to[0], $this->message->getTo());
+		$this->assertEquals($to, $this->message->getTo());
 	}
 
 	public function testEmptyTo() {
-		$this->assertNull($this->message->getTo());
-		$this->assertEquals([], $this->message->getToList());
+		$this->assertEquals(new Horde_Mail_Rfc822_List(), $this->message->getTo());
 	}
 
 	public function testCC() {

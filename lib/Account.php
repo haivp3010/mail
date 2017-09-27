@@ -186,13 +186,15 @@ class Account implements IAccount {
 	 */
 	public function sendMessage(IMessage $message, $draftUID) {
 		// build mime body
-		$from = new Horde_Mail_Rfc822_Address($message->getFrom());
+		// TODO: sender name should be set earlier already
+		// esp. if a alias is used
+		$from = $message->getFrom()->first();
 		$from->personal = $this->getName();
 		$headers = [
 			'From' => $from,
-			'To' => $message->getToList(),
-			'Cc' => $message->getCCList(),
-			'Bcc' => $message->getBCCList(),
+			'To' => $message->getTo(),
+			'Cc' => $message->getCC(),
+			'Bcc' => $message->getBCC(),
 			'Subject' => $message->getSubject(),
 		];
 
@@ -245,9 +247,9 @@ class Account implements IAccount {
 		$from->personal = $this->getName();
 		$headers = [
 			'From' => $from,
-			'To' => $message->getToList(),
-			'Cc' => $message->getCCList(),
-			'Bcc' => $message->getBCCList(),
+			'To' => $message->getTo(),
+			'Cc' => $message->getCC(),
+			'Bcc' => $message->getBCC(),
 			'Subject' => $message->getSubject(),
 			'Date' => Horde_Mime_Headers_Date::create(),
 		];

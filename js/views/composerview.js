@@ -36,10 +36,8 @@ define(function(require) {
 				aliases: aliases,
 				isReply: this.isReply(),
 				to: this.data.to,
-				toList: this.data.toList,
 				cc: this.data.cc,
-				ccList: this.data.ccList,
-				bccList: this.data.bccList,
+				bcc: this.data.bcc,
 				subject: this.data.subject,
 				message: this.data.body,
 				submitButtonTitle: this.isReply() ? t('mail', 'Reply') : t('mail', 'Send'),
@@ -93,14 +91,17 @@ define(function(require) {
 				type: 'new',
 				account: null,
 				repliedMessage: null,
-				data: {
-					to: '',
-					cc: '',
-					subject: '',
-					body: ''
-				}
+				data: {}
 			};
 			_.defaults(options, defaultOptions);
+			_.defaults(options.data, {
+				to: [],
+				cc: [],
+				bcc: [],
+				subject: '',
+				body: '',
+				gaxy: 4
+			});
 
 			/**
 			 * Composer type (new, reply)
@@ -309,7 +310,7 @@ define(function(require) {
 			// if available get account from drop-down list
 			if (this.$('.mail-account').length > 0) {
 				alias = this.findAliasById(this.$('.mail-account').
-					find(':selected').val());
+						find(':selected').val());
 				this.account = this.accounts.get(alias.accountId);
 			}
 
@@ -331,9 +332,9 @@ define(function(require) {
 				if (!!options.repliedMessage) {
 					// Reply -> flag message as replied
 					Radio.message.trigger('flag',
-						options.repliedMessage,
-						'answered',
-						true);
+							options.repliedMessage,
+							'answered',
+							true);
 				}
 
 				_this.$('#mail_new_message').prop('disabled', false);
@@ -348,7 +349,7 @@ define(function(require) {
 					// the sent message was a draft
 					if (!_.isUndefined(Radio.ui.request('messagesview:collection'))) {
 						Radio.ui.request('messagesview:collection').
-							remove({id: _this.draftUID});
+								remove({id: _this.draftUID});
 					}
 					_this.draftUID = null;
 				}
@@ -371,7 +372,7 @@ define(function(require) {
 				bcc.prop('disabled', false);
 				subject.prop('disabled', false);
 				_this.$('.new-message-attachments-action').
-					css('display', 'inline-block');
+						css('display', 'inline-block');
 				_this.$('#add-cloud-attachment').prop('disabled', false);
 				_this.$('#add-local-attachment').prop('disabled', false);
 				newMessageBody.prop('disabled', false);
@@ -392,7 +393,7 @@ define(function(require) {
 			// if available get account from drop-down list
 			if (this.$('.mail-account').length > 0) {
 				var alias = this.findAliasById(this.$('.mail-account').
-					find(':selected').val());
+						find(':selected').val());
 				this.account = this.accounts.get(alias.accountId);
 			}
 
@@ -424,12 +425,12 @@ define(function(require) {
 			var minutes = date.getMinutes();
 
 			this.$('.message-body').first().text(
-				'\n\n\n' +
-				from + ' – ' +
-				$.datepicker.formatDate('D, d. MM yy ', date) +
-				date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes + '\n> ' +
-				text.replace(/\n/g, '\n> ')
-				);
+					'\n\n\n' +
+					from + ' – ' +
+					$.datepicker.formatDate('D, d. MM yy ', date) +
+					date.getHours() + ':' + (minutes < 10 ? '0' : '') + minutes + '\n> ' +
+					text.replace(/\n/g, '\n> ')
+					);
 
 			this.setAutoSize(false);
 			// Expand reply message body on click
@@ -463,17 +464,17 @@ define(function(require) {
 
 				elem.bind('keydown', function(event) {
 					if (event.keyCode === $.ui.keyCode.TAB &&
-						typeof elem.data('autocomplete') !== 'undefined' &&
-						elem.data('autocomplete').menu.active) {
+							typeof elem.data('autocomplete') !== 'undefined' &&
+							elem.data('autocomplete').menu.active) {
 						event.preventDefault();
 					}
 				}).autocomplete({
 					source: function(request, response) {
 						$.getJSON(
-							OC.generateUrl('/apps/mail/autoComplete'),
-							{
-								term: extractLast(request.term)
-							}, response);
+								OC.generateUrl('/apps/mail/autoComplete'),
+								{
+									term: extractLast(request.term)
+								}, response);
 					},
 					search: function() {
 						// custom minLength
@@ -500,8 +501,8 @@ define(function(require) {
 						return false;
 					}
 				}).
-					data('ui-autocomplete')._renderItem = function(
-					$ul, item) {
+						data('ui-autocomplete')._renderItem = function(
+						$ul, item) {
 					var $item = $('<li/>');
 					var $row = $('<a/>');
 
@@ -578,7 +579,7 @@ define(function(require) {
 					});
 				} else {
 					var firstAccount = this.accounts.filter(function(
-						account) {
+							account) {
 						return account.get('accountId') !== -1;
 					})[0];
 					alias = _.find(this.aliases, function(alias) {

@@ -6,18 +6,14 @@
 	</select>
 	<div class="composer-fields">
 		<a href="#" class="composer-cc-bcc-toggle transparency
-			{{#ifHasCC replyCc replyCcList}}
+			{{#ifHasCC}}
 			hidden
 			{{/ifHasCC}}">{{ t '+ cc/bcc' }}</a>
 		<input type="text" name="to"
 		    {{#if isReply}}
 		    value="{{printAddressListPlain replyToList}}"
 		    {{else}}
-			{{#if toList}}
-			value="{{printAddressListPlain toList}}"
-			{{else}}
-			value="{{to}}"
-			{{/if}}
+		    value="{{printAddressListPlain to}}"
 		    {{/if}}
 		    class="to recipient-autocomplete" />
 		<label class="to-label" for="to" class="transparency">{{ t 'to' }}</label>
@@ -29,11 +25,7 @@
 			    {{#if isReply}}
 			    value="{{replyCc}}"
 			    {{else}}
-				{{#if ccList}}
-				value="{{printAddressListPlain ccList}}"
-				{{else}}
-				value="{{cc}}"
-				{{/if}}
+			    value="{{printAddressListPlain cc}}"
 			    {{/if}}
 			    />
 			<label for="cc" class="cc-label transparency">{{ t 'cc' }}</label>
@@ -41,8 +33,8 @@
 			    {{#if isReply}}
 			    value="{{replyBcc}}"
 			    {{else}}
-				{{#if bccList}}
-				value="{{printAddressListPlain bccList}}"
+				{{#if bcc}}
+				value="{{printAddressListPlain bcc}}"
 				{{else}}
 				value="{{bcc}}"
 				{{/if}}

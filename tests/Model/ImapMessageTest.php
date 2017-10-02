@@ -37,26 +37,6 @@ class ImapMessageTest extends PHPUnit_Framework_TestCase {
 		$this->assertNull($m->getFrom());
 	}
 
-	public function testGetReplyCcList() {
-		$data = new Horde_Imap_Client_Data_Fetch();
-		$data->setEnvelope(array(
-			'to' => 'a@b.org, tom@example.org, b@example.org',
-			'cc' => 'a@b.org, tom@example.org, a@example.org'
-		));
-		$message = new IMAPMessage(null, 'INBOX', 123, $data);
-
-		$cc = $message->getReplyCcList('a@b.org');
-		$this->assertTrue(is_array($cc));
-		$this->assertEquals(3, count($cc));
-		$cc = array_map(function($item) {
-			return $item['email'];
-		}, $cc);
-
-		$this->assertContains('tom@example.org', $cc);
-		$this->assertContains('a@example.org', $cc);
-		$this->assertContains('b@example.org', $cc);
-	}
-
 	public function testIconvHtmlMessage() {
 		$conn = $this->getMockBuilder('Horde_Imap_Client_Socket')
 		->disableOriginalConstructor()

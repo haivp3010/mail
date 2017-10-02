@@ -230,28 +230,6 @@ class IMAPMessage implements IMessage, JsonSerializable {
 	}
 
 	/**
-	 * @return AddressList
-	 */
-	public function getReplyTo() {
-		return AddressList::fromHorde($this->getEnvelope()->from);
-	}
-
-	/**
-	 * on reply, fill cc with everyone from to and cc except yourself
-	 *
-	 * @param string $ownMail
-	 */
-	public function getReplyCcList($ownMail) {
-		$e = $this->getEnvelope();
-		$list = new \Horde_Mail_Rfc822_List();
-		$list->add($e->to);
-		$list->add($e->cc);
-		$list->unique();
-		$list->remove($ownMail);
-		return $this->convertAddressList($list);
-	}
-
-	/**
 	 * Get the ID if available
 	 *
 	 * @return int|null
@@ -447,13 +425,6 @@ class IMAPMessage implements IMessage, JsonSerializable {
 
 		$data['attachments'] = $this->attachments;
 
-		if ($specialRole === 'sent') {
-			$data['replyToList'] = $this->getTo();
-			$data['replyCcList'] = $this->getCC();
-		} else {
-			$data['replyToList'] = $this->getReplyTo(true);
-			$data['replyCcList'] = $this->getReplyCcList($ownMail);
-		}
 		return $data;
 	}
 

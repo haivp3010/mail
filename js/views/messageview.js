@@ -43,10 +43,13 @@ define(function(require) {
 			this.message = options.message;
 			this.messageBody = options.model;
 			this.reply = {
-				replyToList: this.messageBody.get('replyToList'),
-				replyCc: this.messageBody.get('replyCc'),
-				toEmail: this.messageBody.get('toEmail'),
-				replyCcList: this.messageBody.get('replyCcList'),
+				to: this.messageBody.get('to').filter(function(oldRecipient) {
+					// Send to everyone except yourself
+					return oldRecipient.email !== options.message.folder.account.get('emailAddress');
+				}),
+				from: this.messageBody.get('to')[0],
+				fromEmail: options.message.folder.account.get('emailAddress'), // TODO: alias?
+				cc: this.messageBody.get('cc'), // Keep CC values
 				body: ''
 			};
 

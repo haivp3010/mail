@@ -17,14 +17,12 @@
  *
  */
 
-define(function(require) {
+define(function() {
 	'use strict';
 
-	var _ = require('underscore');
-
 	return function(options) {
-		var hasCc = _.isUndefined(this.cc.length > 0);
-		var hasBcc = _.isUndefined(this.bcc.length > 0);
+		var hasCc = this.cc.length > 0;
+		var hasBcc = this.bcc.length > 0;
 		if (hasCc || hasBcc) {
 			return options.fn(this);
 		} else {

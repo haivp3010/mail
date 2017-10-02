@@ -40,11 +40,7 @@ define(function(require) {
 				bcc: this.data.bcc,
 				subject: this.data.subject,
 				message: this.data.body,
-				submitButtonTitle: this.isReply() ? t('mail', 'Reply') : t('mail', 'Send'),
-				// Reply data
-				replyToList: this.data.replyToList,
-				replyCc: this.data.replyCc,
-				replyCcList: this.data.replyCcList
+				submitButtonTitle: this.isReply() ? t('mail', 'Reply') : t('mail', 'Send')
 			};
 		},
 		type: 'new',
@@ -100,7 +96,6 @@ define(function(require) {
 				bcc: [],
 				subject: '',
 				body: '',
-				gaxy: 4
 			});
 
 			/**
@@ -126,13 +121,12 @@ define(function(require) {
 			 */
 			this.data = options.data;
 
+			this.accounts = options.accounts;
 			if (!this.isReply()) {
-				this.accounts = options.accounts;
 				this.account = options.account || this.accounts.at(0);
 				this.draftUID = options.data.id;
 			} else {
 				this.account = options.account;
-				this.accounts = options.accounts;
 				this.folder = options.folder;
 				this.repliedMessage = options.repliedMessage;
 			}
@@ -587,9 +581,9 @@ define(function(require) {
 					});
 				}
 			} else {
-				var toEmail = this.data.toEmail;
+				var fromEmail = this.data.fromEmail;
 				alias = _.find(this.aliases, function(alias) {
-					return alias.emailAddress === toEmail;
+					return alias.emailAddress === fromEmail;
 				});
 			}
 			if (alias) {

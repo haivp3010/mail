@@ -37,7 +37,6 @@ use Horde_Imap_Client_Fetch_Query;
 use Horde_Imap_Client_Ids;
 use Horde_Imap_Client_Mailbox;
 use Horde_Imap_Client_Socket;
-use Horde_Mail_Rfc822_List;
 use Horde_Mime_Part;
 use JsonSerializable;
 use OC;

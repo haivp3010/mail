@@ -485,13 +485,12 @@ class MessagesController extends Controller {
 	}
 
 	/**
-	 * @param integer $accountId
+	 * @param int $accountId
 	 * @param string $folderId
 	 * @param int $id
 	 * @param IMAPMessage $m
-	 * @param IAccount $account
 	 * @param IMailBox $mailBox
-	 * @return mixed
+	 * @return array
 	 */
 	private function enhanceMessage($accountId, $folderId, $id, IMAPMessage $m, $mailBox) {
 		$json = $m->getFullMessage($mailBox->getSpecialRole());

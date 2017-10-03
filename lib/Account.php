@@ -185,8 +185,6 @@ class Account implements IAccount {
 	 */
 	public function sendMessage(IMessage $message, $draftUID) {
 		// build mime body
-		// TODO: sender name should be set earlier already
-		// esp. if a alias is used
 		$headers = [
 			'From' => $message->getFrom()->first()->toHorde(),
 			'To' => $message->getTo()->toHorde(),

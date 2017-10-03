@@ -28,7 +28,7 @@ use Horde_Mail_Rfc822_Address;
 use JsonSerializable;
 use SGH\Comparable\Comparable;
 
-class Address implements JsonSerializable, Comparable {
+class Address implements JsonSerializable {
 
 	/** @var Horde_Mail_Rfc822_Address */
 	private $wrapped;
@@ -77,7 +77,7 @@ class Address implements JsonSerializable, Comparable {
 	 * @param Address $object
 	 * @return boolean
 	 */
-	public function compareTo($object) {
+	public function equals($object) {
 		return $this->getEmail() === $object->getEmail()
 			&& $this->getLabel() === $object->getLabel();
 	}

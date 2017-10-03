@@ -51,4 +51,39 @@ class AddressTest extends TestCase {
 		$this->assertEquals($expected, $horde);
 	}
 
+	public function testEqualsIdentical() {
+		$address = new Address('Christoph Wurst', 'christoph@domain.tld');
+
+		$equals = $address->equals($address);
+
+		$this->assertTrue($equals);
+	}
+
+	public function testEquals() {
+		$address1 = new Address('Christoph Wurst', 'christoph@domain1.tld');
+		$address2 = new Address('Christoph Wurst', 'christoph@domain1.tld');
+
+		$equals = $address1->equals($address2);
+
+		$this->assertTrue($equals);
+	}
+
+	public function testDoesNotEqual() {
+		$address1 = new Address('Christoph Wurst', 'christoph@domain1.tld');
+		$address2 = new Address('Christoph Wurst', 'christoph@domain2.tld');
+
+		$equals = $address1->equals($address2);
+
+		$this->assertFalse($equals);
+	}
+
+	public function testDoesNotEqualBecauseDifferentLabel() {
+		$address1 = new Address('Christoph Wurst', 'christoph@domain.tld');
+		$address2 = new Address('Wurst Christoph', 'christoph@domain.tld');
+
+		$equals = $address1->equals($address2);
+
+		$this->assertFalse($equals);
+	}
+
 }

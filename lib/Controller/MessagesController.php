@@ -169,7 +169,7 @@ class MessagesController extends Controller {
 		/* @var $message IMAPMessage */
 		$message = $mailBox->getMessage($id);
 
-		$json = $this->enhanceMessage($accountId, $folderId, $id, $message, $account, $mailBox);
+		$json = $this->enhanceMessage($accountId, $folderId, $id, $message, $mailBox);
 
 		// Unified inbox hack
 		$messageId = $id;
@@ -493,7 +493,7 @@ class MessagesController extends Controller {
 	 * @param IMailBox $mailBox
 	 * @return mixed
 	 */
-	private function enhanceMessage($accountId, $folderId, $id, IMAPMessage $m, IAccount $account, $mailBox) {
+	private function enhanceMessage($accountId, $folderId, $id, IMAPMessage $m, $mailBox) {
 		$json = $m->getFullMessage($mailBox->getSpecialRole());
 		$json['senderImage'] = $this->contactsIntegration->getPhoto($m->getFrom()->first()->toHorde()->bare_address);
 		if (isset($json['hasHtmlBody'])) {

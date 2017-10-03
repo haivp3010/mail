@@ -65,8 +65,7 @@ class MailTransmissionTest extends TestCase {
 		$this->attachmentService = $this->createMock(IAttachmentService::class);
 		$this->logger = $this->createMock(Logger::class);
 
-		$this->transmission = new MailTransmission($this->addressCollector, $this->userFolder, $this->attachmentService,
-			$this->logger);
+		$this->transmission = new MailTransmission($this->addressCollector, $this->userFolder, $this->attachmentService, $this->logger);
 	}
 
 	public function testSendNewMessage() {
@@ -80,6 +79,52 @@ class MailTransmissionTest extends TestCase {
 		$account->expects($this->once())
 			->method('sendMessage')
 			->with($message, null);
+		$message->expects($this->once())
+			->method('getTo')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getCc')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getBcc')
+			->willReturn(new AddressList());
+
+		$this->transmission->sendMessage('garfield', $messageData, $replyData);
+	}
+
+	public function testSendNewMessageAndCollectAddresses() {
+		$account = $this->createMock(Account::class);
+		$messageData = NewMessageData::fromRequest($account, 'to@domain.tld', 'cc@domain.tld', 'bcc@domain.tld', 'sub', 'bod', null);
+		$replyData = new RepliedMessageData($account, null, null);
+		$message = $this->createMock(IMessage::class);
+		$account->expects($this->once())
+			->method('newMessage')
+			->willReturn($message);
+		$account->expects($this->once())
+			->method('sendMessage')
+			->with($message, null);
+		$message->expects($this->once())
+			->method('getTo')
+			->willReturn(new AddressList([
+				new Address('To', 'to@domain.tld'),
+		]));
+		$message->expects($this->once())
+			->method('getCc')
+			->willReturn(new AddressList([
+				new Address('Cc', 'cc@domain.tld'),
+		]));
+		$message->expects($this->once())
+			->method('getBcc')
+			->willReturn(new AddressList([
+				new Address('Bcc', 'bcc@domain.tld'),
+		]));
+		$this->addressCollector->expects($this->once())
+			->method('addAddresses')
+			->with($this->equalTo(new AddressList([
+					new Address('To', 'to@domain.tld'),
+					new Address('Cc', 'cc@domain.tld'),
+					new Address('Bcc', 'bcc@domain.tld'),
+		])));
 
 		$this->transmission->sendMessage('garfield', $messageData, $replyData);
 	}
@@ -95,6 +140,15 @@ class MailTransmissionTest extends TestCase {
 		$account->expects($this->once())
 			->method('sendMessage')
 			->with($message, 123);
+		$message->expects($this->once())
+			->method('getTo')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getCc')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getBcc')
+			->willReturn(new AddressList());
 
 		$this->transmission->sendMessage('garfield', $messageData, $replyData, null, 123);
 	}
@@ -121,6 +175,15 @@ class MailTransmissionTest extends TestCase {
 		$message->expects($this->once())
 			->method('setFrom')
 			->with($this->equalTo(new AddressList([new Address('User', 'a@d.com')])));
+		$message->expects($this->once())
+			->method('getTo')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getCc')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getBcc')
+			->willReturn(new AddressList());
 
 		$this->transmission->sendMessage('garfield', $messageData, $replyData, $alias);
 	}
@@ -159,6 +222,15 @@ class MailTransmissionTest extends TestCase {
 		$message->expects($this->once())
 			->method('addAttachmentFromFiles')
 			->with($node);
+		$message->expects($this->once())
+			->method('getTo')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getCc')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getBcc')
+			->willReturn(new AddressList());
 
 		$this->transmission->sendMessage('garfield', $messageData, $replyData);
 	}
@@ -192,6 +264,15 @@ class MailTransmissionTest extends TestCase {
 		$mailbox->expects($this->once())
 			->method('setMessageFlag')
 			->with($repliedMessageId, Horde_Imap_Client::FLAG_ANSWERED, true);
+		$message->expects($this->once())
+			->method('getTo')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getCc')
+			->willReturn(new AddressList());
+		$message->expects($this->once())
+			->method('getBcc')
+			->willReturn(new AddressList());
 
 		$this->transmission->sendMessage('garfield', $messageData, $replyData);
 	}

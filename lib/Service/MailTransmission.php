@@ -257,7 +257,9 @@ class MailTransmission implements IMailTransmission {
 	 */
 	private function collectMailAddresses($message) {
 		try {
-			$addresses = array_merge($message->getTo, $message->getCC(), $message->getBCC());
+			$addresses = $message->getTo()
+				->merge($message->getCC())
+				->merge($message->getBCC());
 			$this->addressCollector->addAddresses($addresses);
 		} catch (Exception $e) {
 			$this->logger->error("Error while collecting mail addresses: " . $e->getMessage());

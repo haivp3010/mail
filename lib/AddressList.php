@@ -90,6 +90,37 @@ class AddressList implements Countable, JsonSerializable {
 	}
 
 	/**
+	 * Iterate over the internal list of addresses using a generator method
+	 */
+	public function iterate() {
+		foreach ($this->addresses as $address) {
+			yield $address;
+		}
+	}
+
+	/**
+	 * @param AddressList $other
+	 * @return AddressList
+	 */
+	public function merge(AddressList $other) {
+		$addresses = $this->addresses;
+
+		array_walk($other->addresses, function(Address $address) use (&$addresses) {
+			$same = array_filter($addresses, function(Address $our) use ($address) {
+				// Check whether our array contains the other address
+				return $our->compareTo($address);
+			});
+			if (empty($same)) {
+				// No dup found, hence the address is new and we
+				// have to add it
+				$addresses[] = $address;
+			}
+		});
+
+		return new AddressList($addresses);
+	}
+
+	/**
 	 * @return Horde_Mail_Rfc822_List
 	 */
 	public function toHorde() {

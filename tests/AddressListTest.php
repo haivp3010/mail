@@ -83,7 +83,7 @@ class AddressListTest extends TestCase {
 
 		$this->assertEquals($expected, $hordeList);
 	}
-	
+
 	public function testFromAndToHorde() {
 		$add1 = new Horde_Mail_Rfc822_Address('a@domain.tld');
 		$add1->personal = 'A';
@@ -102,6 +102,73 @@ class AddressListTest extends TestCase {
 		$hordeList = $list->toHorde();
 
 		$this->assertEquals($expected, $hordeList);
+	}
+
+	public function testMergeIdentical() {
+		$a = new AddressList([
+			new Address('A', 'a@b.c'),
+		]);
+		$b = new AddressList([
+			new Address('A', 'a@b.c'),
+		]);
+
+		$c = $a->merge($b);
+
+		$this->assertCount(1, $c);
+	}
+
+	public function testMergeNonIdentical() {
+		$a = new AddressList([
+			new Address('A', 'a@b.c'),
+		]);
+		$b = new AddressList([
+			new Address('B', 'b@b.c'),
+		]);
+
+		$c = $a->merge($b);
+
+		$this->assertCount(1, $a);
+		$this->assertCount(1, $b);
+		$this->assertCount(2, $c);
+	}
+
+	public function testMergeMixed() {
+		$a = new AddressList([
+			new Address('A', 'a@b.c'),
+			new Address('B', 'b@b.c'),
+		]);
+		$b = new AddressList([
+			new Address('B', 'b@b.c'),
+		]);
+
+		$c = $a->merge($b);
+
+		$this->assertCount(2, $c);
+	}
+
+	public function testMergeEmpty() {
+		$a = new AddressList([
+			new Address('A', 'a@b.c'),
+			new Address('B', 'b@b.c'),
+		]);
+		$b = new AddressList();
+
+		$c = $a->merge($b);
+
+		$this->assertCount(2, $c);
+	}
+
+	public function testMergeToEmpty() {
+		$a = new AddressList([
+		]);
+		$b = new AddressList([
+			new Address('A', 'a@b.c'),
+			new Address('B', 'b@b.c'),
+		]);
+
+		$c = $a->merge($b);
+
+		$this->assertCount(2, $c);
 	}
 
 }

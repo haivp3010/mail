@@ -24,6 +24,7 @@
 
 namespace OCA\Mail\Tests;
 
+use Horde_Mail_Rfc822_Address;
 use OCA\Mail\Address;
 
 class AddressTest extends TestCase {
@@ -38,6 +39,16 @@ class AddressTest extends TestCase {
 		$json = $address->jsonSerialize();
 
 		$this->assertEquals($expected, $json);
+	}
+
+	public function testToHorde() {
+		$address = new Address('Christoph Wurst', 'christoph@domain.tld');
+		$expected = new Horde_Mail_Rfc822_Address('christoph@domain.tld');
+		$expected->personal = 'Christoph Wurst';
+
+		$horde = $address->toHorde();
+
+		$this->assertEquals($expected, $horde);
 	}
 
 }

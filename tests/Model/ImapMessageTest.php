@@ -24,6 +24,7 @@ namespace OCA\Mail\Tests\Model;
 use Horde_Imap_Client_Data_Fetch;
 use Horde_Imap_Client_Fetch_Results;
 use Horde_Mime_Part;
+use OCA\Mail\AddressList;
 use OCA\Mail\Model\IMAPMessage;
 use OCA\Mail\Service\Html;
 use PHPUnit_Framework_TestCase;
@@ -34,7 +35,7 @@ class ImapMessageTest extends PHPUnit_Framework_TestCase {
 		$data = new Horde_Imap_Client_Data_Fetch();
 		$m = new IMAPMessage(null, 'INBOX', 123, $data);
 
-		$this->assertNull($m->getFrom());
+		$this->assertEuqals(new AddressList(), $m->getFrom());
 	}
 
 	public function testIconvHtmlMessage() {

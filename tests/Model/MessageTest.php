@@ -18,10 +18,12 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>
  *
  */
+
 namespace OCA\Mail\Tests\Model;
 
-use Horde_Mail_Rfc822_List;
 use Horde_Mime_Part;
+use OCA\Mail\Address;
+use OCA\Mail\AddressList;
 use OCA\Mail\Model\Message;
 use PHPUnit_Framework_TestCase;
 
@@ -97,7 +99,9 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testFrom() {
-		$from = new Horde_Mail_Rfc822_List('user@example.com');
+		$from = new AddressList([
+			new Address('Fritz', 'fritz@domain.tld'),
+		]);
 
 		$this->message->setFrom($from);
 
@@ -109,7 +113,7 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 			'alice@example.com',
 			'Bob <bob@example.com>',
 		];
-		$to = Message::parseAddressList($expected);
+		$to = AddressList::fromHorde(Message::parseAddressList($expected));
 
 		$this->message->setTo($to);
 
@@ -117,39 +121,39 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 	}
 
 	public function testEmptyTo() {
-		$this->assertEquals(new Horde_Mail_Rfc822_List(), $this->message->getTo());
+		$this->assertEquals(new AddressList(), $this->message->getTo());
 	}
 
 	public function testCC() {
-		$expected = [
+		$raw = [
 			'alice@example.com',
 			'Bob <bob@example.com>',
 		];
-		$cc = Message::parseAddressList($expected);
+		$cc = AddressList::fromHorde(Message::parseAddressList($raw));
 
 		$this->message->setCC($cc);
 
-		$this->assertEquals($expected, $this->message->getCCList());
+		$this->assertEquals($cc, $this->message->getCC());
 	}
 
 	public function testEmptyCC() {
-		$this->assertEquals([], $this->message->getCCList());
+		$this->assertEquals(new AddressList(), $this->message->getCC());
 	}
 
 	public function testBCC() {
-		$expected = [
+		$raw = [
 			'alice@example.com',
 			'Bob <bob@example.com>',
 		];
-		$bcc = Message::parseAddressList($expected);
+		$bcc = AddressList::fromHorde(Message::parseAddressList($raw));
 
 		$this->message->setBCC($bcc);
 
-		$this->assertEquals($expected, $this->message->getBCCList());
+		$this->assertEquals($bcc, $this->message->getBCC());
 	}
 
 	public function testEmptyBCC() {
-		$this->assertEquals([], $this->message->getBCCList());
+		$this->assertEquals(new AddressList(), $this->message->getBCC());
 	}
 
 	public function testRepliedMessage() {

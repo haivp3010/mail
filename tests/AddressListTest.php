@@ -65,4 +65,43 @@ class AddressListTest extends TestCase {
 		$this->assertCount(1, $list);
 	}
 
+	public function testToHorde() {
+		$list = new AddressList([
+			new Address('A', 'a@domain.tld'),
+			new Address('B', 'b@domain.tld'),
+		]);
+		$add1 = new Horde_Mail_Rfc822_Address('a@domain.tld');
+		$add1->personal = 'A';
+		$add2 = new Horde_Mail_Rfc822_Address('b@domain.tld');
+		$add2->personal = 'B';
+		$expected = new Horde_Mail_Rfc822_List([
+			$add1,
+			$add2
+		]);
+
+		$hordeList = $list->toHorde();
+
+		$this->assertEquals($expected, $hordeList);
+	}
+	
+	public function testFromAndToHorde() {
+		$add1 = new Horde_Mail_Rfc822_Address('a@domain.tld');
+		$add1->personal = 'A';
+		$add2 = new Horde_Mail_Rfc822_Address('b@domain.tld');
+		$add2->personal = 'B';
+		$source = new Horde_Mail_Rfc822_List([
+			$add1,
+			$add2,
+		]);
+		$expected = new Horde_Mail_Rfc822_List([
+			$add1,
+			$add2,
+		]);
+		$list = AddressList::fromHorde($source);
+
+		$hordeList = $list->toHorde();
+
+		$this->assertEquals($expected, $hordeList);
+	}
+
 }

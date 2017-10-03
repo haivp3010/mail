@@ -56,6 +56,13 @@ class Address implements JsonSerializable {
 	}
 
 	/**
+	 * @return Horde_Mail_Rfc822_Address
+	 */
+	public function toHorde() {
+		return $this->wrapped;
+	}
+
+	/**
 	 * @return array
 	 */
 	public function jsonSerialize() {

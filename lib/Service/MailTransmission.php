@@ -24,9 +24,10 @@ namespace OCA\Mail\Service;
 use Exception;
 use Horde_Exception;
 use Horde_Imap_Client;
-use Horde_Mail_Rfc822_List;
 use OC\Files\Node\File;
 use OCA\Mail\Account;
+use OCA\Mail\Address;
+use OCA\Mail\AddressList;
 use OCA\Mail\Contracts\IAttachmentService;
 use OCA\Mail\Contracts\IMailTransmission;
 use OCA\Mail\Db\Alias;
@@ -84,8 +85,12 @@ class MailTransmission implements IMailTransmission {
 			$message = $this->buildNewMessage($account, $messageData);
 		}
 
+		$fromEmail = $alias ? $alias->alias : $account->getEMailAddress();
+		$from = new AddressList([
+			new Address($account->getName(), $fromEmail),
+		]);
 		$account->setAlias($alias);
-		$message->setFrom(new Horde_Mail_Rfc822_List($alias ? $alias->alias : $account->getEMailAddress()));
+		$message->setFrom($from);
 		$message->setCC($messageData->getCc());
 		$message->setBcc($messageData->getBcc());
 		$message->setContent($messageData->getBody());
@@ -112,7 +117,10 @@ class MailTransmission implements IMailTransmission {
 		$imapMessage = $account->newMessage();
 		$imapMessage->setTo($message->getTo());
 		$imapMessage->setSubject($message->getSubject() ?: '');
-		$imapMessage->setFrom(new Horde_Mail_Rfc822_List($account->getEMailAddress()));
+		$from = new AddressList([
+			new Address($account->getName(), $account->getEMailAddress()),
+		]);
+		$imapMessage->setFrom($from);
 		$imapMessage->setCC($message->getCc());
 		$imapMessage->setBcc($message->getBcc());
 		$imapMessage->setContent($message->getBody());

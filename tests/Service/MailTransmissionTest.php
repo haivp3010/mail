@@ -24,6 +24,8 @@ namespace OCA\Mail\Tests\Service;
 use Horde_Imap_Client;
 use OC\Files\Node\File;
 use OCA\Mail\Account;
+use OCA\Mail\Address;
+use OCA\Mail\AddressList;
 use OCA\Mail\Contracts\IAttachmentService;
 use OCA\Mail\Db\Alias;
 use OCA\Mail\Mailbox;
@@ -111,11 +113,14 @@ class MailTransmissionTest extends TestCase {
 			->method('sendMessage')
 			->with($message, null);
 		$account->expects($this->once())
+			->method('getName')
+			->willReturn('User');
+		$account->expects($this->once())
 			->method('setAlias')
 			->with($alias);
 		$message->expects($this->once())
 			->method('setFrom')
-			->with($this->equalTo('a@d.com'));
+			->with($this->equalTo(new AddressList([new Address('User', 'a@d.com')])));
 
 		$this->transmission->sendMessage('garfield', $messageData, $replyData, $alias);
 	}

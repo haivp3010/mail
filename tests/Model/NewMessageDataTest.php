@@ -23,6 +23,7 @@ namespace OCA\Mail\Tests\Model;
 
 use Horde_Mail_Rfc822_List;
 use OCA\Mail\Account;
+use OCA\Mail\AddressList;
 use OCA\Mail\Model\NewMessageData;
 use PHPUnit_Framework_TestCase;
 
@@ -39,9 +40,9 @@ class NewMessageDataTest extends PHPUnit_Framework_TestCase {
 		$messageData = NewMessageData::fromRequest($account, $to, $cc, $bcc, $subject, $body, $attachments);
 
 		$this->assertEquals($account, $messageData->getAccount());
-		$this->assertInstanceOf(Horde_Mail_Rfc822_List::class, $messageData->getTo());
-		$this->assertInstanceOf(Horde_Mail_Rfc822_List::class, $messageData->getCc());
-		$this->assertInstanceOf(Horde_Mail_Rfc822_List::class, $messageData->getBcc());
+		$this->assertInstanceOf(AddressList::class, $messageData->getTo());
+		$this->assertInstanceOf(AddressList::class, $messageData->getCc());
+		$this->assertInstanceOf(AddressList::class, $messageData->getBcc());
 		$this->assertEquals('Hello', $messageData->getSubject());
 		$this->assertEquals('Hi!', $messageData->getBody());
 		$this->assertEquals([], $messageData->getAttachments());
@@ -58,12 +59,12 @@ class NewMessageDataTest extends PHPUnit_Framework_TestCase {
 		$messageData = NewMessageData::fromRequest($account, $to, $cc, $bcc, $subject, $body, $attachments);
 
 		$this->assertEquals($account, $messageData->getAccount());
-		$this->assertInstanceOf(Horde_Mail_Rfc822_List::class, $messageData->getTo());
-		$this->assertEquals(['test@domain.com', 'test2@domain.de'], $messageData->getTo()->bare_addresses);
-		$this->assertInstanceOf(Horde_Mail_Rfc822_List::class, $messageData->getCc());
-		$this->assertEquals(['test2@domain.at'], $messageData->getCc()->bare_addresses);
-		$this->assertInstanceOf(Horde_Mail_Rfc822_List::class, $messageData->getBcc());
-		$this->assertEquals(['test3@domain.net'], $messageData->getBcc()->bare_addresses);
+		$this->assertInstanceOf(AddressList::class, $messageData->getTo());
+		$this->assertEquals(['test@domain.com', 'test2@domain.de'], $messageData->getTo()->toHorde()->bare_addresses);
+		$this->assertInstanceOf(AddressList::class, $messageData->getCc());
+		$this->assertEquals(['test2@domain.at'], $messageData->getCc()->toHorde()->bare_addresses);
+		$this->assertInstanceOf(AddressList::class, $messageData->getBcc());
+		$this->assertEquals(['test3@domain.net'], $messageData->getBcc()->toHorde()->bare_addresses);
 		$this->assertEquals('Hello', $messageData->getSubject());
 		$this->assertEquals('Hi!', $messageData->getBody());
 		$this->assertEquals([], $messageData->getAttachments());

@@ -65,6 +65,7 @@ class Message implements IMessage {
 	/**
 	 * @param string $list
 	 * @return Horde_Mail_Rfc822_List
+	 * @todo return AddressList instead
 	 */
 	public static function parseAddressList($list) {
 		return new Horde_Mail_Rfc822_List($list);

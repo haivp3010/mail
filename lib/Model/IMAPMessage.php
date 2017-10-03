@@ -171,20 +171,11 @@ class IMAPMessage implements IMessage, JsonSerializable {
 	}
 
 	/**
-	 * @param string $from
+	 * @param AddressList $from
 	 * @throws Exception
 	 */
 	public function setFrom(AddressList $from) {
 		throw new Exception('IMAP message is immutable');
-	}
-
-	/**
-	 * @return string
-	 */
-	public function getToEmail() {
-		$e = $this->getEnvelope();
-		$to = $e->to[0];
-		return $to ? $to->bare_address : null;
 	}
 
 	/**
@@ -262,6 +253,9 @@ class IMAPMessage implements IMessage, JsonSerializable {
 		return $this->fetch->getImapDate();
 	}
 
+	/**
+	 * @return int
+	 */
 	public function getSize() {
 		return $this->fetch->getSize();
 	}
@@ -406,11 +400,10 @@ class IMAPMessage implements IMessage, JsonSerializable {
 	}
 
 	/**
-	 * @param string $ownMail
 	 * @param string $specialRole
 	 * @return array
 	 */
-	public function getFullMessage($ownMail, $specialRole = null) {
+	public function getFullMessage($specialRole = null) {
 		$mailBody = $this->plainMessage;
 
 		$data = $this->jsonSerialize();
@@ -428,6 +421,9 @@ class IMAPMessage implements IMessage, JsonSerializable {
 		return $data;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getUid(),
@@ -436,7 +432,6 @@ class IMAPMessage implements IMessage, JsonSerializable {
 			'cc' => $this->getCC()->jsonSerialize(),
 			'bcc' => $this->getBCC()->jsonSerialize(),
 			'fromEmail' => $this->getFrom()->first()->getEmail(),
-			'toEmail' => $this->getToEmail(),
 			'subject' => $this->getSubject(),
 			'date' => OC::$server->getDateTimeFormatter()->formatDate($this->getSentDate()->format('U')),
 			'dateInt' => $this->getSentDate()->getTimestamp(),

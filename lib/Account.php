@@ -37,7 +37,6 @@ use Horde_Imap_Client;
 use Horde_Imap_Client_Ids;
 use Horde_Imap_Client_Mailbox;
 use Horde_Imap_Client_Socket;
-use Horde_Mail_Rfc822_Address;
 use Horde_Mail_Rfc822_List;
 use Horde_Mail_Transport;
 use Horde_Mail_Transport_Mail;

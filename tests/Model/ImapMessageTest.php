@@ -35,7 +35,7 @@ class ImapMessageTest extends PHPUnit_Framework_TestCase {
 		$data = new Horde_Imap_Client_Data_Fetch();
 		$m = new IMAPMessage(null, 'INBOX', 123, $data);
 
-		$this->assertEuqals(new AddressList(), $m->getFrom());
+		$this->assertEquals(new AddressList(), $m->getFrom());
 	}
 
 	public function testIconvHtmlMessage() {

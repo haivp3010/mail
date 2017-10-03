@@ -166,9 +166,10 @@ class MessagesController extends Controller {
 	private function loadMessage($accountId, $folderId, $id) {
 		$account = $this->getAccount($accountId);
 		$mailBox = $account->getMailbox(base64_decode($folderId));
-		$m = $mailBox->getMessage($id);
+		/* @var $message IMAPMessage */
+		$message = $mailBox->getMessage($id);
 
-		$json = $this->enhanceMessage($accountId, $folderId, $id, $m, $account, $mailBox);
+		$json = $this->enhanceMessage($accountId, $folderId, $id, $message, $account, $mailBox);
 
 		// Unified inbox hack
 		$messageId = $id;
@@ -405,8 +406,8 @@ class MessagesController extends Controller {
 
 	/**
 	 * @param string $messageId
-	 * @param $accountId
-	 * @param $folderId
+	 * @param int $accountId
+	 * @param string $folderId
 	 * @return callable
 	 */
 	private function enrichDownloadUrl($accountId, $folderId, $messageId, $attachment) {
@@ -486,15 +487,15 @@ class MessagesController extends Controller {
 	/**
 	 * @param integer $accountId
 	 * @param string $folderId
-	 * @param $id
+	 * @param int $id
 	 * @param IMAPMessage $m
 	 * @param IAccount $account
 	 * @param IMailBox $mailBox
 	 * @return mixed
 	 */
 	private function enhanceMessage($accountId, $folderId, $id, IMAPMessage $m, IAccount $account, $mailBox) {
-		$json = $m->getFullMessage($account->getEmail(), $mailBox->getSpecialRole());
-		$json['senderImage'] = $this->contactsIntegration->getPhoto($m->getFrom()->first()->bare_addresses[0]);
+		$json = $m->getFullMessage($mailBox->getSpecialRole());
+		$json['senderImage'] = $this->contactsIntegration->getPhoto($m->getFrom()->first()->toHorde()->bare_address);
 		if (isset($json['hasHtmlBody'])) {
 			$json['htmlBodyUrl'] = $this->buildHtmlBodyUrl($accountId, $folderId, $id);
 		}

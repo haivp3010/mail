@@ -46,9 +46,9 @@ define(function(require) {
 				// Send to everyone except yourself
 				return oldRecipient.email !== options.message.folder.account.get('emailAddress');
 			});
-			if (to.length === 0
-					&& this.messageBody.get('to').length === 1
-					&& this.messageBody.get('to')[0].email === options.message.folder.account.get('emailAddress')) {
+			if (to.length === 0 &&
+					this.messageBody.get('to').length === 1 &&
+					this.messageBody.get('to')[0].email === options.message.folder.account.get('emailAddress')) {
 				// Super rare case: if you write an email to yourself, your email must not be removed
 				to.push(this.messageBody.get('to')[0]);
 			}

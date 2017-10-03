@@ -21,7 +21,11 @@ define(function(require) {
 		folder: undefined,
 		defaults: {
 			flags: [],
-			active: false
+			active: false,
+			from: [],
+			to: [],
+			cc: [],
+			bcc: []
 		},
 		initialize: function() {
 			this.set('flags', new MessageFlags(this.get('flags')));

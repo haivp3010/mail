@@ -494,9 +494,7 @@ define(function(require) {
 						this.value = terms.join(', ');
 						return false;
 					}
-				}).
-						data('ui-autocomplete')._renderItem = function(
-						$ul, item) {
+				}).data('ui-autocomplete')._renderItem = function($ul, item) {
 					var $item = $('<li/>');
 					var $row = $('<a/>');
 

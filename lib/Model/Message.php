@@ -62,15 +62,6 @@ class Message implements IMessage {
 	/** @var int[] */
 	private $localAttachments = [];
 
-	/**
-	 * @param string $list
-	 * @return Horde_Mail_Rfc822_List
-	 * @todo return AddressList instead
-	 */
-	public static function parseAddressList($list) {
-		return new Horde_Mail_Rfc822_List($list);
-	}
-
 	public function __construct() {
 		$this->from = new AddressList();
 		$this->to = new AddressList();

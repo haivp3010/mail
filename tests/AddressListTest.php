@@ -54,6 +54,17 @@ class AddressListTest extends TestCase {
 		$this->assertEquals($expected, $json);
 	}
 
+	public function testParseSingleAddress() {
+		$source = 'a@b.c';
+		$expected = new AddressList([
+			new Address('a@b.c', 'a@b.c'),
+		]);
+
+		$list = AddressList::parse($source);
+
+		$this->assertEquals($expected, $list);
+	}
+
 	public function testFromHordeList() {
 		$hordeList = new Horde_Mail_Rfc822_List([
 			new Horde_Mail_Rfc822_Address(),

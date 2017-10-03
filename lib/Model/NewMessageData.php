@@ -81,12 +81,9 @@ class NewMessageData {
 	 * @return NewMessageData
 	 */
 	public static function fromRequest(Account $account, $to, $cc, $bcc, $subject, $body, $attachments) {
-		$toArray = is_null($to) ? new Horde_Mail_Rfc822_List() : Message::parseAddressList($to);
-		$toList = AddressList::fromHorde($toArray);
-		$ccArray = is_null($cc) ? new Horde_Mail_Rfc822_List() : Message::parseAddressList($cc);
-		$ccList = AddressList::fromHorde($ccArray);
-		$bccArray = is_null($bcc) ? new Horde_Mail_Rfc822_List() : Message::parseAddressList($bcc);
-		$bccList = AddressList::fromHorde($bccArray);
+		$toList = AddressList::parse($to ?: '');
+		$ccList = AddressList::parse($cc ?: '');
+		$bccList = AddressList::parse($bcc ?: '');
 		$attchmentsArray = is_null($attachments) ? [] : $attachments;
 
 		return new NewMessageData($account, $toList, $ccList, $bccList, $subject, $body, $attchmentsArray);

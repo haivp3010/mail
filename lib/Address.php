@@ -39,14 +39,15 @@ class Address implements JsonSerializable {
 	 */
 	public function __construct($label, $email) {
 		$this->wrapped = new Horde_Mail_Rfc822_Address($email);
-		$this->wrapped->personal = $label;
+		// If no label is set we use the email
+		$this->wrapped->personal = $label ?: $email;
 	}
 
 	/**
 	 * @return string
 	 */
 	public function getLabel() {
-		return $this->wrapped->personal ?: $this->getEmail();
+		return $this->wrapped->personal;
 	}
 
 	/**

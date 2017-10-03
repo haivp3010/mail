@@ -43,6 +43,17 @@ class AddressList implements Countable, JsonSerializable {
 	}
 
 	/**
+	 * Parse an address (list) like "a@b.c" or "a@b.c, d@e.f"
+	 *
+	 * @param string|string[] $str address list string to parse
+	 * @return AddressList
+	 */
+	public static function parse($str) {
+		$hordeList = new Horde_Mail_Rfc822_List($str);
+		return self::fromHorde($hordeList);
+	}
+
+	/**
 	 * Construct a new list from an horde list
 	 *
 	 * @param Horde_Mail_Rfc822_List $hordeList

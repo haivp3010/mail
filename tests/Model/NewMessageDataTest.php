@@ -21,7 +21,6 @@
 
 namespace OCA\Mail\Tests\Model;
 
-use Horde_Mail_Rfc822_List;
 use OCA\Mail\Account;
 use OCA\Mail\AddressList;
 use OCA\Mail\Model\NewMessageData;

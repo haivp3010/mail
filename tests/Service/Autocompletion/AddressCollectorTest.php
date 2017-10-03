@@ -52,7 +52,7 @@ class AddressCollectorTest extends PHPUnit_Framework_TestCase {
 			'"User" <user@example.com>',
 			'Example <example@user.com>',
 		];
-		$addressList = AddressList::fromHorde(Message::parseAddressList($addresses));
+		$addressList = AddressList::parse($addresses);
 		$address1 = new CollectedAddress();
 		$address1->setDisplayName('User');
 		$address1->setEmail('user@example.com');
@@ -84,7 +84,7 @@ class AddressCollectorTest extends PHPUnit_Framework_TestCase {
 		$addresses = [
 			'user@example.com',
 		];
-		$addressList = AddressList::fromHorde(Message::parseAddressList($addresses));
+		$addressList = AddressList::parse($addresses);
 
 		$this->mapper->expects($this->at(0))
 			->method('exists')

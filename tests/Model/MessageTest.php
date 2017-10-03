@@ -37,56 +37,6 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 		$this->message = new Message();
 	}
 
-	public function addressListDataProvider() {
-		return [
-			[
-				// simple address
-				'user@example.com',
-				[
-					'user@example.com'
-				]
-			],
-			[
-				// address list with comma as delimiter
-				'user@example.com, anotheruser@example.com',
-				[
-					'user@example.com',
-					'anotheruser@example.com'
-				]
-			],
-			[
-				// empty list
-				'',
-				[]
-			],
-			[
-				// address with name
-				'"user" <user@example.com>',
-				[
-					'user@example.com'
-				]
-			],
-			[
-				// Trailing slash
-				'"user" <user@example.com>,',
-				[
-					'user@example.com'
-				]
-			]
-		];
-	}
-
-	/**
-	 * @dataProvider addressListDataProvider
-	 */
-	public function testParseAddressList($list, $expected) {
-		$result = Message::parseAddressList($list);
-
-		foreach ($expected as $exp) {
-			$this->assertTrue($result->contains($exp));
-		}
-	}
-
 	public function testFlags() {
 		$flags = [
 			'seen',
@@ -113,7 +63,7 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 			'alice@example.com',
 			'Bob <bob@example.com>',
 		];
-		$to = AddressList::fromHorde(Message::parseAddressList($expected));
+		$to = AddressList::parse($expected);
 
 		$this->message->setTo($to);
 
@@ -129,7 +79,7 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 			'alice@example.com',
 			'Bob <bob@example.com>',
 		];
-		$cc = AddressList::fromHorde(Message::parseAddressList($raw));
+		$cc = AddressList::parse($raw);
 
 		$this->message->setCC($cc);
 
@@ -145,7 +95,7 @@ class MessageTest extends PHPUnit_Framework_TestCase {
 			'alice@example.com',
 			'Bob <bob@example.com>',
 		];
-		$bcc = AddressList::fromHorde(Message::parseAddressList($raw));
+		$bcc = AddressList::parse($raw);
 
 		$this->message->setBCC($bcc);
 

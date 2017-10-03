@@ -35,7 +35,7 @@ define([
 		});
 
 		it('uses the right URL', function() {
-			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/accounts');
+			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/api/accounts');
 
 			var url = collection.url();
 

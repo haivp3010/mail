@@ -35,14 +35,14 @@ define([
 		});
 
 		it('creates a new account on the server', function() {
-			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/accounts');
+			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/api/accounts');
 
 			var promise = AccountService.createAccount({
 				email: 'email@example.com',
 				password: '12345'
 			});
 
-			expect(OC.generateUrl).toHaveBeenCalledWith('apps/mail/accounts');
+			expect(OC.generateUrl).toHaveBeenCalledWith('apps/mail/api/accounts');
 
 			expect(jasmine.Ajax.requests.count())
 				.toBe(1);
@@ -56,14 +56,14 @@ define([
 		});
 
 		it('handle account creation errors correctly', function(done) {
-			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/accounts');
+			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/api/accounts');
 
 			var creating = AccountService.createAccount({
 				email: 'email@example.com',
 				password: '12345'
 			});
 
-			expect(OC.generateUrl).toHaveBeenCalledWith('apps/mail/accounts');
+			expect(OC.generateUrl).toHaveBeenCalledWith('apps/mail/api/accounts');
 
 			expect(jasmine.Ajax.requests.count()).toBe(1);
 			expect(jasmine.Ajax.requests.mostRecent().url)

@@ -40,7 +40,7 @@ define([
 
 		/* when everything went as expected on attachment upload */
 		it('uploads a new attachment on the server', function(done) {
-			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/attachments');
+			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/api/attachments');
 
 			jasmine.Ajax.stubRequest('index.php/apps/mail/attachments').andReturn({
 				status: 200,
@@ -49,7 +49,7 @@ define([
 			});
 
 			var promise = AttachmentService.uploadLocalAttachment(fakeFile, fakeModel);
-			expect(OC.generateUrl).toHaveBeenCalledWith('/apps/mail/attachments');
+			expect(OC.generateUrl).toHaveBeenCalledWith('/apps/mail/api/attachments');
 
 			promise
 				.then(function(attachment, fileId) {
@@ -65,7 +65,7 @@ define([
 
 		/* when an error occurred on server side on attachment upload */
 		it('handles errors during attachment uploads', function(done) {
-			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/attachments');
+			spyOn(OC, 'generateUrl').and.returnValue('index.php/apps/mail/api/attachments');
 
 			jasmine.Ajax.stubRequest('index.php/apps/mail/attachments').andReturn({
 				status: 500,
@@ -73,7 +73,7 @@ define([
 			});
 
 			var promise = AttachmentService.uploadLocalAttachment(fakeFile, fakeModel);
-			expect(OC.generateUrl).toHaveBeenCalledWith('/apps/mail/attachments');
+			expect(OC.generateUrl).toHaveBeenCalledWith('/apps/mail/api/attachments');
 
 			promise
 				.then(function(attachment, fileId) {

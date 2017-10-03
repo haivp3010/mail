@@ -46,7 +46,7 @@ define(function(require) {
 			this.$el.unwrap();
 			this.setElement(this.$el);
 
-			var displayName = this.model.get('from')[0].email;
+			var displayName = this.model.get('from')[0].label;
 			// Don't show any placeholder if 'from' isn't set
 			if (displayName) {
 				_.each(this.$el.find('.avatar'), function(a) {
